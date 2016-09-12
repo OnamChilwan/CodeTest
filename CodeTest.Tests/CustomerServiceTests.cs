@@ -35,12 +35,6 @@
             {
                 Assert.That(this.customer.Name, Is.EqualTo("Test Dummy"));
             }
-
-            [Test]
-            public void Then_The_Archive_Data_Service_Is_Called()
-            {
-                this.archiveDataService.Verify(x => x.GetArchivedCustomer(123), Times.Once);
-            }
         }
 
         public class Given_A_Non_Archived_Customer_And_Has_Failovers
@@ -82,18 +76,6 @@
             public void Then_Customer_Name_Is_Correct()
             {
                 Assert.That(this.result.Name, Is.EqualTo("Test"));
-            }
-
-            [Test]
-            public void Then_The_Failover_Repository_Is_Called()
-            {
-                this.failoverRepository.Verify(x => x.GetFailOverEntries(), Times.Once);
-            }
-
-            [Test]
-            public void Then_The_Failover_Customer_Data_Access_Is_Called()
-            {
-                this.failoverCustomerDataAccess.Verify(x => x.GetCustomerById(123), Times.Once);
             }
         }
     }
