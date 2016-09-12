@@ -1,7 +1,7 @@
 ﻿namespace CodeTest
 {
     using System;
-    using System.Configuration;
+    using System.Linq;
 
     public class CustomerService
     {
@@ -29,21 +29,10 @@
                 return this.archiveDataService.GetArchivedCustomer(customerId);
             }
 
-            var failoverEntries = this.failoverRepository.GetFailOverEntries();
-            var failedRequests = 0;
-
-            foreach (var failoverEntry in failoverEntries)
-            {
-                if (failoverEntry.DateTime > DateTime.Now.AddMinutes(-10))
-                {
-                    failedRequests++;
-                }
-            }
-
             CustomerResponse customerResponse = null;
             Customer customer = null;
 
-            if (failedRequests > 100 && this.isFailoverModeEnabled)
+            if (this.HasExceededMaximumNumberOfFailures())
             {
                 customerResponse = this.failoverCustomerDataAccess.GetCustomerById(customerId);
             }
@@ -64,6 +53,21 @@
             }
 
             return customer;
+        }
+
+        private bool HasExceededMaximumNumberOfFailures()
+        {
+            const int MaximumNumberOfFailovers = 100;
+            var failedRequests = this.GetNumberOfFailedRequests();
+
+            return failedRequests > MaximumNumberOfFailovers && this.isFailoverModeEnabled;
+        }
+
+        private int GetNumberOfFailedRequests()
+        {
+            var failoverEntries = this.failoverRepository.GetFailOverEntries();
+
+            return failoverEntries.Count(failoverEntry => failoverEntry.DateTime > DateTime.Now.AddMinutes(-10));
         }
     }
 }
