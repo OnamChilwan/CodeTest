@@ -5,3 +5,6 @@
 /CodeTest/bin/Debug
 /CodeTest/obj/Debug
 *.suo
+/CodeTest.Tests/bin/Debug
+/CodeTest.Tests/obj/Debug
+/packages

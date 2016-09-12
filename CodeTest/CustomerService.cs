@@ -5,25 +5,23 @@
 
     public class CustomerService
     {
+        private readonly IArchiveDataService archiveDataService;
+
+        public CustomerService(IArchiveDataService archiveDataService)
+        {
+            this.archiveDataService = archiveDataService;
+        }
+
         public Customer GetCustomer(int customerId, bool isCustomerArchived)
         {
-
-            Customer archivedCustomer = null;
-
             if (isCustomerArchived)
             {
-                var archivedDataService = new ArchivedDataService();
-                archivedCustomer = archivedDataService.GetArchivedCustomer(customerId);
-
-                return archivedCustomer;
+                return this.archiveDataService.GetArchivedCustomer(customerId);
             }
             else
             {
-
                 var failoverRespository = new FailoverRepository();
                 var failoverEntries = failoverRespository.GetFailOverEntries();
-
-
                 var failedRequests = 0;
 
                 foreach (var failoverEntry in failoverEntries)
@@ -46,7 +44,7 @@
                     var dataAccess = new CustomerDataAccess();
                     customerResponse = dataAccess.LoadCustomer(customerId);
 
-                    
+
                 }
 
                 if (customerResponse.IsArchived)

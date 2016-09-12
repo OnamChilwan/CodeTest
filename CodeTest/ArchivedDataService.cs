@@ -1,6 +1,11 @@
 ﻿namespace CodeTest
 {
-    public class ArchivedDataService
+    public interface IArchiveDataService
+    {
+        Customer GetArchivedCustomer(int customerId);
+    }
+
+    public class ArchivedDataService : IArchiveDataService
     {
         public Customer GetArchivedCustomer(int customerId)
         {
