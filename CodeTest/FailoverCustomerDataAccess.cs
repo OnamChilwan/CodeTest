@@ -1,5 +1,11 @@
 ﻿namespace CodeTest
 {
+
+    public interface IFailoverCustomerDataAccess
+    {
+        CustomerResponse GetCustomerById(int customerId);
+    }
+
     public class FailoverCustomerDataAccess
     {
         public static CustomerResponse GetCustomerById(int id)

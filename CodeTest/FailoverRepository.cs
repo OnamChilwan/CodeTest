@@ -2,7 +2,13 @@
 {
     using System.Collections.Generic;
 
-    public class FailoverRepository
+
+    public interface IFailoverRepository
+    {
+        List<FailoverEntry> GetFailOverEntries();
+    }
+
+    public class FailoverRepository : IFailoverRepository
     {
         public List<FailoverEntry> GetFailOverEntries()
         {
